@@ -47,8 +47,7 @@ alias grep-dir="grep -rnw . -e "
 
 # system aliases
 alias open='xdg-open'
-
-alias sh-edit='chezmoi edit --apply ~/.bashrc'
+alias sh-edit='chezmoi edit --apply ~/.bashrc && . ~/.bashrc'
 alias sh-upd='. ~/.bashrc'
 
 alias key-init='sudo rm -rf /etc/pacman.d/gnupg && sudo pacman -Sy --noconfirm archlinux-keyring cachyos-keyring && sudo pacman-key --init && sudo pacman-key --populate archlinux cachyos'
@@ -57,8 +56,8 @@ alias key-upd='sudo pacman-key —refresh-keys'
 alias mirror-upd='sudo cachyos-rate-mirrors'
 
 alias sys-upd='yay -Syu ; flatpak update ; sudo fwupdmgr update ; sudo checkservices'
-alias sys-arm='sudo pacman -Qdttq | sudo pacman -Rs - ; flatpak uninstall --unused ; sudo pacman -S --needed gnome'
-
+alias sys-enc='sudo systemd-cryptenroll --tpm2-device=auto --wipe-slot=tpm2 /dev/disk/by-label/root'
+alias sys-arm='yay -Scc; sudo pacman -Qdttq | sudo pacman -Rs - ; flatpak uninstall --unused ; sudo pacman -S --needed gnome'
 alias sys-bios='systemctl reboot --firmware-setup'
 alias sys-enc='sudo systemd-cryptenroll --tpm2-device=auto --wipe-slot=tpm2 /dev/disk/by-label/root'
 alias sys-initram='sudo mkinitcpio -P'
@@ -106,6 +105,7 @@ alias venv-enter="source .venv/bin/activate"
 
 #dotnet
 export PATH="$HOME/.dotnet/tools:$PATH"
+eval "$(dotnet completions script bash)"
 
 #cmake
 export CMAKE_GENERATOR="Ninja"
@@ -113,6 +113,7 @@ export CC="/usr/bin/clang"
 export CXX="/usr/bin/clang++"
 alias cmake-run-build="cmake -B build -S . -GNinja && cmake --build build"
 alias cmake-clean-build="rm -rf build && cmake -B build -S . -GNinja && cmake --build build"
+
 
 # cachyos debuginfo url
 export DEBUGINFOD_URLS="https://debuginfod.archlinux.org https://debuginfod.cachyos.org https://debuginfod.elfutils.org/"
@@ -145,6 +146,8 @@ alias fs-trim="sudo ftrim -v /"
 ###########################
 {{- if eq .chezmoi.hostname "pranv-b550" }}
 
+#leetcode cli
+eval "$(leetcode completions)"
 
 # btrfs maintaince
 function btrfs-balance() {
@@ -169,6 +172,8 @@ function fs-trim() {
     done
 }
 
+alias btrfs-usage-desktop="sudo btrfs filesystem usage / /home/pranav/tierone /home/pranav/tiertwo /home/pranav/tierfreeze"
+
 #snapd
 export PATH="/var/lib/snapd/snap/bin:$PATH" 
 
@@ -178,8 +183,10 @@ alias docker="podman"
 alias docker-compose="podman-compose"
 
 #opencode / ai brain
-alias brain="cd ~/git/personalbrain/ && opencode . -c"
-alias brain-gemini="cd ~/git/personalbrain/ && gemini -m gemini-3.1-pro-preview ."
+alias brain="cd ~/git/personalbrain/ && opencode ."
+alias brain-copilot="cd ~/git/personalbrain/ && code ."
+alias brain-agy="cd ~/git/personalbrain/ && agy ."
+alias brain-antigrav="cd ~/git/personalbrain/ && antigravity-ide ."
 
 {{- end }}
 
